@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="A website that crawls keywords of articles related to it and displays it in word cloud" />
+        <meta name="author" content="Henry_ub" />
+        <title>오늘의 이슈</title>
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">|
+        <link rel="shortcut icon" href="/static/favicon.ico">
+        <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-NVSRNY03C8"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-NVSRNY03C8');
+        </script>
+        {% block head %}
+        {% endblock %}
+    </head>
+    <body class="sb-nav-fixed">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+            <!-- Navbar Brand-->
+            <!-- Sidebar Toggle-->
+            <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+            <a class="navbar-brand ps-3" href="{{ url_for('index') }}"><img src={{ url_for('static', filename='img/icon.png') }} width="20px" height="20px" alt="icon">오늘의 이슈</a>
+            <!-- Navbar Search-->
+            <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+                <div class="input-group">
+                    <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
+                    <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
+                </div>
+            </form>
+            <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="#!">Settings</a></li>
+                        <li><a class="dropdown-item" href="#!">Activity Log</a></li>
+                        <li><hr class="dropdown-divider" /></li>
+                        {% if login == True %}
+                        <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>
+                        {% else %}
+                        <li><a class="dropdown-item" href="{{ url_for('login') }}">Login</a></li>
+                        {% endif %}
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+        <div id="layoutSidenav">
+            <div id="layoutSidenav_nav">
+                {% if lightMode == True %}
+                <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
+                {% else %}
+                <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                {% endif %}
+                    <div class="sb-sidenav-menu">
+                        <div class="nav">
+                            <div class="sb-sidenav-menu-heading">Home</div>
+                            <a class="nav-link" href="{{ url_for('index') }}">
+                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                Statistics
+                            </a>
+                            <a class="nav-link" href="{{ url_for('charts') }}">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                Word Clouds
+                            </a>
+                            <div class="sb-sidenav-menu-heading">Interface</div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                                Layouts
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    {% if lightMode == True %}
+                                    <a class="nav-link" href="{{ url_for('light') }}">Dark Mode</a>
+                                    {% else %}
+                                    <a class="nav-link" href="{{ url_for('light') }}">Light Mode</a>
+                                    {% endif %}
+                                </nav>
+                            </div>
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                                <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                                Pages
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
+                                    <a class="nav-link" href="{{ url_for('bookmarks')  }}">Bookmarks</a>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sb-sidenav-footer">
+                        <div class="small">Logged in as:</div>
+                        <img src="{{ url_for('static', filename='img/google.png') }}" width="20px" height="20px" alt="icon">
+                        Google
+                    </div>
+                </nav>
+            </div>
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4">
+                        {% block main %}
+                        <h1 class="mt-4" style="text-align:left;"><b>Statistics</b></h1>
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item active">News Based Statistics Search</li>
+                        </ol>
+                        <div id="container">
+                            <div class="slide_wrap">
+                              <div class="slide_box">
+                                <div class="slide_list clearfix">
+                                  <div class="slide_content slide01" style="cursor: pointer;" onclick="location.href='/goto/{{dateList[0]}}';">
+                                    <p>{{dateList[0]}}</p>
+                                  </div>
+                                  <div class="slide_content slide02" style="cursor: pointer;" onclick="location.href='/goto/{{dateList[1]}}';">
+                                    <p>{{dateList[1]}}</p>
+                                  </div>
+                                  <div class="slide_content slide03" style="cursor: pointer;" onclick="location.href='/goto/{{dateList[2]}}';">
+                                    <p>{{dateList[2]}}</p>
+                                  </div>
+                                  <div class="slide_content slide04" style="cursor: pointer;" onclick="location.href='/goto/{{dateList[3]}}';">
+                                    <p>{{dateList[3]}}</p>
+                                  </div>
+                                  <div class="slide_content slide05" style="cursor: pointer;" onclick="location.href='/goto/{{dateList[4]}}';">
+                                    <p>{{dateList[4]}}</p>
+                                  </div>
+                                </div>
+                                <!-- // .slide_list -->
+                              </div>
+                              <!-- // .slide_box -->
+                              <div class="slide_btn_box">
+                                <button type="button" class="slide_btn_prev">Prev</button>
+                                <button type="button" class="slide_btn_next">Next</button>
+                              </div>
+                              <!-- // .slide_btn_box -->
+                              <ul class="slide_pagination"></ul>
+                              <!-- // .slide_pagination -->
+                            </div>
+                            <!-- // .slide_wrap -->
+                        </div>
+                          <!-- // .container -->
+
+                        <div class="row">
+                            <div class="col-xl-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-chart-area me-1"></i>
+                                        <b>Today's Hot Issue</b>
+                                    </div>
+
+                                    <div class="card-body">
+                                        <img id="wordCloud" src="/static/img/Word_Cloud/wc_{{ date }}.png" width="100%" height="100%" alt="wordcloud" object-fit="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-6">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-chart-bar me-1"></i>
+                                        <b>Keyword Ranking</b>
+                                    </div>
+                                    <div class="card-body"><canvas id="myBarChart" width="100%" height="53.3"></canvas></div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-table me-1"></i>
+                                <b>Top 50 Most Viewed News Every Day</b>
+                            </div>
+                            <div class="card-body">
+                                <table id="datatablesSimple">
+                                    <thead>
+                                        <tr>
+                                            <th>Scrap</th>
+                                            <th>Published</th>
+                                            <th>Newspaper</th>
+                                            <th>Title</th>
+                                            <th>Keyword1</th>
+                                            <th>Keyword2</th>
+                                            <th>Keyword3</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Scrap</th>
+                                            <th>Published</th>
+                                            <th>Newspaper</th>
+                                            <th>Title</th>
+                                            <th>Keyword1</th>
+                                            <th>Keyword2</th>
+                                            <th>Keyword3</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        {% for article in articleList %}
+                                        <tr>
+                                            <td>
+                                                <button id="scrap"class="scrap" type="button" onclick="window.location.href='/favorite/{{article[0]}}'">
+                                                    {% if login == True and article[0] in scrapList %}
+
+                                                    <img src="{{ url_for('static', filename='img/start_scrap.png') }}" width="20px" height="20px" alt="icon">
+                                                    {% else %}
+                                                    <img src="{{ url_for('static', filename='img/star.png') }}" width="20px" height="20px" alt="icon">
+                                                    {% endif %}
+                                                </button>
+                                            </td>
+                                            <td>{{article[3]}}</td>
+                                            <td>{{article[7]}}</td>
+                                            <td onClick="window.open('{{article[2]}}');" style="cursor:pointer;">{{article[1]}}</td>
+                                            <td>{{article[4]}}</td>
+                                            <td>{{article[5]}}</td>
+                                            <td>{{article[6]}}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        {% endblock %}
+                    </div>
+                </main>
+                <footer class="py-4 bg-light mt-auto">
+                    <div class="container-fluid px-4">
+                        <div class="d-flex align-items-center justify-content-between small">
+                            <div class="text-muted">Copyright &copy; 오늘의 이슈 2022</div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="{{ url_for('static', filename='js/scripts.js') }}"> </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+
+        {% block js %}
+        <script>
+            // Set new default font family and font color to mimic Bootstrap's default styling
+            Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+            Chart.defaults.global.defaultFontColor = '#292b2c';
+
+            // Bar Chart Example
+            var ctx = document.getElementById("myBarChart");
+            var myLineChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['{{Ranked_Tags[2]}}', "{{Ranked_Tags[4]}}", "{{Ranked_Tags[6]}}", "{{Ranked_Tags[8]}}", "{{Ranked_Tags[10]}}", "{{Ranked_Tags[12]}}"],
+                datasets: [{
+                label: "Revenue",
+                backgroundColor: [
+                'rgba(255, 99, 132, 0.5)',
+                'rgba(54, 162, 235, 0.5)',
+                'rgba(255, 206, 86, 0.5)',
+                'rgba(75, 192, 192, 0.5)',
+                'rgba(153, 102, 255, 0.5)',
+                'rgba(255, 159, 64, 0.5)'],
+            borderColor: ['rgb(255, 99, 132,1.5)',
+                'rgba(54, 162, 235, 1.5)',
+                'rgba(255, 206, 86, 1.5)',
+                'rgba(75, 192, 192, 1.5)',
+                'rgba(153, 102, 255, 1.5)',
+                'rgba(255, 159, 64, 1.5)'],
+                data: [{{Ranked_Tags[3]}}, {{Ranked_Tags[5]}}, {{Ranked_Tags[7]}}, {{Ranked_Tags[9]}}, {{Ranked_Tags[11]}}, {{Ranked_Tags[13]}}],
+                }],
+            },
+            options: {
+                scales: {
+                xAxes: [{
+                    time: {
+                    unit: 'month'
+                    },
+                    gridLines: {
+                    display: false
+                    },
+                    ticks: {
+                    fontSize: 15,
+                    maxTicksLimit: 6
+                    }
+                }],
+                yAxes: [{
+                    ticks: {
+                    min: 0,
+                    max: parseInt(({{Ranked_Tags[3]}}+20)/10)*10,
+                    maxTicksLimit: 5
+                    },
+                    gridLines: {
+                    display: true
+                    }
+                }],
+                },
+                legend: {
+                display: false
+                }
+            }
+            });
+
+        </script>
+        <script>idx = {{idx}}</script>
+
+        <script>
+            (function () {
+
+                const slideList = document.querySelector('.slide_list');  // Slide parent dom
+                const slideContents = document.querySelectorAll('.slide_content');  // each slide dom
+                const slideBtnNext = document.querySelector('.slide_btn_next'); // next button
+                const slideBtnPrev = document.querySelector('.slide_btn_prev'); // prev button
+                const pagination = document.querySelector('.slide_pagination');
+                const slideLen = slideContents.length;  // slide length
+                const slideWidth = 400; // slide width
+                const slideSpeed = 300; // slide speed
+                const startNum = idx; // initial slide index (0 ~ 4)
+
+                slideList.style.width = slideWidth * (slideLen + 2) + "px";
+
+                // Copy first and last slide
+                let firstChild = slideList.firstElementChild;
+                let lastChild = slideList.lastElementChild;
+                let clonedFirst = firstChild.cloneNode(true);
+                let clonedLast = lastChild.cloneNode(true);
+
+                // Add copied Slides
+                slideList.appendChild(clonedFirst);
+                slideList.insertBefore(clonedLast, slideList.firstElementChild);
+
+                // Add pagination dynamically
+                let pageChild = '';
+                for (var i = 0; i < slideLen; i++) {
+                  pageChild += '<li class="dot';
+                  pageChild += (i === startNum) ? ' dot_active' : '';
+                  pageChild += '" data-index="' + i + '"><a href="#"></a></li>';
+                }
+                pagination.innerHTML = pageChild;
+                const pageDots = document.querySelectorAll('.dot'); // each dot from pagination
+
+                slideList.style.transform = "translate3d(-" + (slideWidth * (startNum + 1)) + "px, 0px, 0px)";
+
+                let curIndex = startNum; // current slide index (except copied slide)
+                let curSlide = slideContents[curIndex]; // current slide dom
+                curSlide.classList.add('slide_active');
+
+                /** Next Button Event */
+                slideBtnNext.addEventListener('click', function() {
+                  if (curIndex <= slideLen - 1) {
+                    slideList.style.transition = slideSpeed + "ms";
+                    slideList.style.transform = "translate3d(-" + (slideWidth * (curIndex + 2)) + "px, 0px, 0px)";
+                  }
+                  if (curIndex === slideLen - 1) {
+                    setTimeout(function() {
+                      slideList.style.transition = "0ms";
+                      slideList.style.transform = "translate3d(-" + slideWidth + "px, 0px, 0px)";
+                    }, slideSpeed);
+                    curIndex = -1;
+                  }
+                  curSlide.classList.remove('slide_active');
+                  pageDots[(curIndex === -1) ? slideLen - 1 : curIndex].classList.remove('dot_active');
+                  curSlide = slideContents[++curIndex];
+                  curSlide.classList.add('slide_active');
+                  pageDots[curIndex].classList.add('dot_active');
+                });
+
+                /** Prev Button Event */
+                slideBtnPrev.addEventListener('click', function() {
+                  if (curIndex >= 0) {
+                    slideList.style.transition = slideSpeed + "ms";
+                    slideList.style.transform = "translate3d(-" + (slideWidth * curIndex) + "px, 0px, 0px)";
+                  }
+                  if (curIndex === 0) {
+                    setTimeout(function() {
+                      slideList.style.transition = "0ms";
+                      slideList.style.transform = "translate3d(-" + (slideWidth * slideLen) + "px, 0px, 0px)";
+                    }, slideSpeed);
+                    curIndex = slideLen;
+                  }
+                  curSlide.classList.remove('slide_active');
+                  pageDots[(curIndex === slideLen) ? 0 : curIndex].classList.remove('dot_active');
+                  curSlide = slideContents[--curIndex];
+                  curSlide.classList.add('slide_active');
+                  pageDots[curIndex].classList.add('dot_active');
+                });
+
+                /** Pagination Button Event */
+                let curDot;
+                Array.prototype.forEach.call(pageDots, function (dot, i) {
+                  dot.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    curDot = document.querySelector('.dot_active');
+                    curDot.classList.remove('dot_active');
+
+                    curDot = this;
+                    this.classList.add('dot_active');
+
+                    curSlide.classList.remove('slide_active');
+                    curIndex = Number(this.getAttribute('data-index'));
+                    curSlide = slideContents[curIndex];
+                    curSlide.classList.add('slide_active');
+                    slideList.style.transition = slideSpeed + "ms";
+                    slideList.style.transform = "translate3d(-" + (slideWidth * (curIndex + 1)) + "px, 0px, 0px)";
+                  });
+                });
+              })();
+            </script>
+        {% endblock %}
+    </body>
+</html>

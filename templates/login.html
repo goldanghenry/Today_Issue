@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="login page" />
+        <meta name="author" content="" />
+        <title>Login - 오늘의 이슈</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">|
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-NVSRNY03C8"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-NVSRNY03C8');
+        </script>
+    </head>
+    <body>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <script>
+            alert("{{messages[0]}}")
+        </script>
+        {% endif %}
+        {% endwith %}
+        <div class="wrap">
+            <div class="form-wrap">
+                <div class="button-wrap">
+                    <div id="btn"></div>
+                    <button type="button" class="togglebtn" onclick="login()">LOG IN</button>
+                    <button type="button" class="togglebtn" onclick="register()">REGISTER</button>
+                </div>
+                <div class="social-icons">
+                    <img src="/static/img/fb.png" alt="facebook">
+                    <img src="/static/img/tw.png" alt="twitter">
+                    <img src="/static/img/gl.png" alt="google">
+                </div>
+                <form method = "POST" id="login_proc" action="{{url_for('login_proc')}}" class="input-group">
+                    <input type="email" id="loginId" name="loginId"class="input-field" placeholder="Enter Email">
+                    <input type="password" id="loginPw" name="loginPw" class="input-field" placeholder="Enter Password">
+                    <input type="checkbox" class="checkbox"><span>Remember Password</span>
+                    <button type="submit" class="submit">Login</button>
+                </form>
+                <form method= "POST" id="register" action="{{url_for('register')}}" class="input-group">
+                    <input type="email" id="registerId" name="registerId" class="input-field" placeholder="Your Email">
+                    <input type="text" id="registerUsername" name="registerUsername" class="input-field" placeholder="User name">
+                    <input type="password" id="registerPw" name="registerPw" class="input-field" placeholder="Enter Password">
+                    <input type="checkbox" class="checkbox"><span>Terms and conditions</span>
+                    <button type="submit" class="submit">REGISTER</button>
+                </form>
+            </div>
+        </div>
+        <script>
+            var x = document.getElementById("login_proc");
+            var y = document.getElementById("register");
+            var z = document.getElementById("btn");
+
+            function login(){
+                x.style.left = "50px";
+                y.style.left = "450px";
+                z.style.left = "0";
+            }
+
+            function register(){
+                x.style.left = "-400px";
+                y.style.left = "50px";
+                z.style.left = "110px";
+            }
+        </script>
+    </body>
+</html>
