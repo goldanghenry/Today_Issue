@@ -8,7 +8,7 @@ ROOT = path.dirname(path.realpath(__file__))
 app = Flask(__name__)
 app.secret_key = 'tjdgus12'
 # day = datetime.date.today().strftime("%Y%m%d")# 시작 전 크롤링 실행
-day = "20221114"    # 오늘 날짜
+day = "20221115"    # 오늘 날짜
 
 @app.route('/')
 def index():
