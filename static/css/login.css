@@ -1,97 +1,107 @@
 * {
     margin: 0;
     padding: 0;
-    font-family: sans-serif;
-}
-body {
-    height: 100%;
+    box-sizing: border-box;
+    font-family: 'Pretendard-Regular';
+  }
+  body {
     width: 100%;
-    background-image: url(/static/img/login_background.jpg);
+    height: 90vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* background-color: rgb(2, 90, 159,0.2); */
+    background-color: #f1f1f1;
+    border-top: 10px solid #025a9f;
+    /* background-image: url(/static/img/412b0c702c1294dea7e40e54331c270d.jpg); */
     /* background-position: center;
-    background-size: cover; */
-    position: absolute;
-}
-.form-wrap {
-    width: 380px;
-    height: 480px;
-    position: relative;
-    margin: 6% auto;
-    background: #fff;
-    padding: 5px;
-    padding-left: 25px;
-    overflow: hidden;
-}
-.button-wrap {
+      background-size: cover; */
+      /* background-color: #025a9f; */
+  }
+  
+  .top-logo {
+    margin-top: -70px;
+    width: 350px;
+    /* margin-bottom: 10px; */
+  }
+  
+  main {
+    width: 400px;
+    padding: 30px;
+    margin-top: -60px;
+    background-color: #fff;
+    /* border: 1px solid #eee; */
+    border-radius: 30px 0 0 0;
+  }
+  
+  .button-wrap {
     width: 230px;
     margin: 35px auto;
     position: relative;
-    box-shadow: 0 0 600px 9px #fcae8f;
     border-radius: 30px;
-}
-.togglebtn {
+  }
+  .togglebtn {
     padding: 10px 30px;
     cursor: pointer;
     background: transparent;
     border: 0;
     outline: none;
     position: relative;
-}
-#btn {
+  }
+  #btn {
     top: 0;
     left: 0;
     position: absolute;
     width: 110px;
     height: 100%;
-    background: linear-gradient(to right, #ff105f, #ffad06);
+    background: linear-gradient(to right, #108cff, #63a9d1);
     border-radius: 30px;
-    transition: .5s;
-}
-.social-icons {
+    transition: 0.5s;
+  }
+  .social-icons {
     margin: 30px auto;
     text-align: center;
-}
-.social-icons img {
-    width: 30px ;
+  }
+  .social-icons img {
+    width: 30px;
     cursor: pointer;
-}
-.input-group {
-    top: 180px;
-    position: absolute;
-    width: 280px;
-    transition: .5s;
-}
-.input-field {
+  }
+  .input-field {
     width: 100%;
-    padding: 10px 0;
-    margin: 5px 0;
+    height: 45px;
+    margin-top: 15px;
+    padding: 0 15px;
+    /* background: transparent; */
+    background-color: #fff;
+    border: 1px solid #ddd;
+    outline-color: #025a9f;
+  }
+  
+  .submit {
+    width: 100%;
+    height: 45px;
+    margin-top: 30px;
+    background-color: #025a9f;
+    /* background: linear-gradient(to right, #108cff, #63a9d1); */
+    color: #fff;
     border: none;
-    border-bottom: 1px solid #999;
     outline: none;
-    background: transparent;
-}
-.submit {
-    width: 85%;
-    padding: 10px 30px;
     cursor: pointer;
-    display: block;
-    margin: auto;
-    background: linear-gradient(to right, #ff105f, #ffad06);
-    border: 0;
-    outline: none;
-    border-radius: 30px;
-}
-.checkbox {
-    margin: 30px 10px 30px 0;
-}
-span {
+    font-size: 1rem;
+  }
+  
+  .subBtn {
+    margin-top: 15px;
+    font-weight: 500;
+    text-align: center;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  span {
     color: #777;
     font-size: 12px;
     bottom: 68px;
     position: absolute;
-}
-#login_proc {
-    left: 50px;
-}
-#register {
-    left: 480px;
-}
+  }
+  

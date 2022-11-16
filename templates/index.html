@@ -28,28 +28,22 @@
             <!-- Navbar Brand-->
             <!-- Sidebar Toggle-->
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
-            <a class="navbar-brand ps-3" href="{{ url_for('index') }}"><img src={{ url_for('static', filename='img/icon.png') }} width="20px" height="20px" alt="icon">오늘의 이슈</a>
-            <!-- Navbar Search-->
-            <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
-                <div class="input-group">
-                    <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..." aria-describedby="btnNavbarSearch" />
-                    <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i class="fas fa-search"></i></button>
+
+            <a class="navbar-brand ps-3" href="{{ url_for('index') }}">오늘의 이슈</a>
+
+            <div class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
+                <div style="text-align: center;">
+                    <!-- 유저 이름 및 관리자페이지 이동 버튼  -->
+                    <!-- 로그인 -->
+                    {% if login == True %}
+                    <a href="{{ url_for('logout') }}"><button class="cBtn find-btn1"
+                            style="background-color:cadetblue ;">Logout</button></a>
+                    {% else %}
+                    <a href="{{ url_for('login') }}"><button class="cBtn find-btn1"
+                        style="background-color:cadetblue ;">Login</button></a>
+                    {% endif %}
                 </div>
-            </form>
-            <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#!">Settings</a></li>
-                        <li><a class="dropdown-item" href="#!">Activity Log</a></li>
-                        <li><hr class="dropdown-divider" /></li>
-                        {% if login == True %}
-                        <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a></li>
-                        {% else %}
-                        <li><a class="dropdown-item" href="{{ url_for('login') }}">Login</a></li>
-                        {% endif %}
-                    </ul>
-                </li>
+            </div>
             </ul>
         </nav>
         <div id="layoutSidenav">
@@ -62,45 +56,17 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Home</div>
-                            <a class="nav-link" href="{{ url_for('index') }}">
-                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                Statistics
-                            </a>
-                            <a class="nav-link" href="{{ url_for('charts') }}">
-                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                Word Clouds
-                            </a>
+                            <a class="nav-link" href="{{ url_for('index') }}">Statistics</a>
+                            <a class="nav-link" href="{{ url_for('charts') }}">Word Clouds</a>
+                            <a class="nav-link" href="{{ url_for('bookmarks')  }}">Bookmarks</a>
                             <div class="sb-sidenav-menu-heading">Interface</div>
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                                Layouts
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                            </a>
-                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav">
-                                    {% if lightMode == True %}
-                                    <a class="nav-link" href="{{ url_for('light') }}">Dark Mode</a>
-                                    {% else %}
-                                    <a class="nav-link" href="{{ url_for('light') }}">Light Mode</a>
-                                    {% endif %}
-                                </nav>
-                            </div>
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
-                                <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                                Pages
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                            </a>
-                            <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-                                    <a class="nav-link" href="{{ url_for('bookmarks')  }}">Bookmarks</a>
-                                </nav>
-                            </div>
+
+                            {% if lightMode == True %}
+                            <a class="nav-link" href="{{ url_for('light') }}">Dark Mode</a>
+                            {% else %}
+                            <a class="nav-link" href="{{ url_for('light') }}">Light Mode</a>
+                            {% endif %}
                         </div>
-                    </div>
-                    <div class="sb-sidenav-footer">
-                        <div class="small">Logged in as:</div>
-                        <img src="{{ url_for('static', filename='img/google.png') }}" width="20px" height="20px" alt="icon">
-                        Google
                     </div>
                 </nav>
             </div>
@@ -115,8 +81,8 @@
                         <div id="container">
                             <div class="slide_wrap">
                               <div class="slide_box">
-                                <div class="slide_list clearfix">
-                                  <div class="slide_content slide01" style="cursor: pointer;" onclick="location.href='/goto/{{dateList[0]}}';">
+                                <div class="slide_list clearfix" >
+                                  <div class="slide_content slide01" style="cursor: pointer; " onclick="location.href='/goto/{{dateList[0]}}';">
                                     <p>{{dateList[0]}}</p>
                                   </div>
                                   <div class="slide_content slide02" style="cursor: pointer;" onclick="location.href='/goto/{{dateList[1]}}';">

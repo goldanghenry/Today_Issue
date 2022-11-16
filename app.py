@@ -5,13 +5,15 @@ from datetime import datetime
 import os
 from os import path
 
-load_dotenv()
+
+load_dotenv()       # dotenv()를 사용하기 위해 로드
 ROOT = path.dirname(path.realpath(__file__))
 app = Flask(__name__)
-APP_SECRET_KEY = os.getenv("APP_SECRET_KEY")
-app.secret_key = APP_SECRET_KEY
+APP_SECRET_KEY = os.getenv("APP_SECRET_KEY")    # .env에 있는 SECRET_KEY를 가져옴 
+app.secret_key = APP_SECRET_KEY                 # flask의 session을 사용하기 위한 secret_key
 
-t = datetime.today().strftime("%Y%m%d") # 시작 전 크롤링 실행
+# 매일 오후 16시에 웹 사이트 업데이트 (스크랩핑은 15:55분에 자동 실행)
+t = datetime.today().strftime("%Y%m%d") 
 day=""
 if datetime.now().hour >= 16:
     day = t

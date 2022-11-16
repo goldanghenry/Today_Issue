@@ -5,18 +5,18 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="login page" />
-        <meta name="author" content="" />
+        <meta name="author" content="Henry_ub" />
         <title>Login - 오늘의 이슈</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">|
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
         <!-- Google tag (gtag.js) -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-NVSRNY03C8"></script>
-        <script>
+        <!-- <script>
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
 
           gtag('config', 'G-NVSRNY03C8');
-        </script>
+        </script> -->
     </head>
     <body>
         {% with messages = get_flashed_messages() %}
@@ -26,49 +26,36 @@
         </script>
         {% endif %}
         {% endwith %}
-        <div class="wrap">
-            <div class="form-wrap">
-                <div class="button-wrap">
-                    <div id="btn"></div>
-                    <button type="button" class="togglebtn" onclick="login()">LOG IN</button>
-                    <button type="button" class="togglebtn" onclick="register()">REGISTER</button>
-                </div>
-                <div class="social-icons">
-                    <img src="/static/img/fb.png" alt="facebook">
-                    <img src="/static/img/tw.png" alt="twitter">
-                    <img src="/static/img/gl.png" alt="google">
-                </div>
-                <form method = "POST" id="login_proc" action="{{url_for('login_proc')}}" class="input-group">
-                    <input type="email" id="loginId" name="loginId"class="input-field" placeholder="Enter Email">
-                    <input type="password" id="loginPw" name="loginPw" class="input-field" placeholder="Enter Password">
-                    <input type="checkbox" class="checkbox"><span>Remember Password</span>
-                    <button type="submit" class="submit">Login</button>
-                </form>
-                <form method= "POST" id="register" action="{{url_for('register')}}" class="input-group">
-                    <input type="email" id="registerId" name="registerId" class="input-field" placeholder="Your Email">
-                    <input type="text" id="registerUsername" name="registerUsername" class="input-field" placeholder="User name">
-                    <input type="password" id="registerPw" name="registerPw" class="input-field" placeholder="Enter Password">
-                    <input type="checkbox" class="checkbox"><span>Terms and conditions</span>
-                    <button type="submit" class="submit">REGISTER</button>
-                </form>
-            </div>
-        </div>
+        <a class="navbar-brand ps-3" href="{{ url_for('index') }}"><img src="/static/img/Today_logo.png" alt="Today_Issue_logo" class="top-logo" /></a>
+        <main>
+            <form method="POST" id="login_proc" action="{{url_for('login_proc')}}" class="input-group">
+                <h2>로그인</h2>
+                <input type="email" id="loginId" name="loginId" class="input-field" placeholder="아이디">
+                <input type="password" id="loginPw" name="loginPw" class="input-field" placeholder="비밀번호">
+                <button type="submit" class="submit"><b>로그인</b></button>
+                <p onclick="register()" class="subBtn">회원가입</p>
+            </form>
+            <form method="POST" id="register" action="{{url_for('register')}}" class="input-group" style="display: none;">
+                <h3>회원가입</h3>
+                <input type="email" id="registerId" name="registerId" class="input-field" placeholder="아이디">
+                <input type="text" id="registerUsername" name="registerUsername" class="input-field" placeholder="이름">
+                <input type="password" id="registerPw" name="registerPw" class="input-field" placeholder="비밀번호">
+                <button type="submit" class="submit"><b>회원가입</b></button>
+                <p onclick="login()" class="subBtn">로그인</p>
+            </form>
+        </main>
         <script>
-            var x = document.getElementById("login_proc");
-            var y = document.getElementById("register");
-            var z = document.getElementById("btn");
-
-            function login(){
-                x.style.left = "50px";
-                y.style.left = "450px";
-                z.style.left = "0";
+            const loginForm = document.getElementById('login_proc')
+            const registerForm = document.getElementById('register')
+            function login() {
+                loginForm.style.display = 'block'
+                registerForm.style.display = 'none'
             }
-
-            function register(){
-                x.style.left = "-400px";
-                y.style.left = "50px";
-                z.style.left = "110px";
+            function register() {
+                registerForm.style.display = 'block'
+                loginForm.style.display = 'none'
             }
         </script>
     </body>
 </html>
+
