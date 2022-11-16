@@ -1,8 +1,7 @@
 from flask import Flask, url_for, session, render_template, request, redirect, flash
 import sqlite3
 from dotenv import load_dotenv
-from werkzeug.utils import secure_filename
-import datetime
+from datetime import datetime
 import os
 from os import path
 
@@ -11,8 +10,7 @@ app = Flask(__name__)
 
 APP_SECRET_KEY = os.getenv("APP_SECRET_KEY")
 app.secret_key = APP_SECRET_KEY
-# day = datetime.date.today().strftime("%Y%m%d")# 시작 전 크롤링 실행
-day = "20221115"    # 오늘 날짜
+day = datetime.today().strftime("%Y%m%d") # 시작 전 크롤링 실행
 
 @app.route('/')
 def index():
