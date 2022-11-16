@@ -10,7 +10,14 @@ ROOT = path.dirname(path.realpath(__file__))
 app = Flask(__name__)
 APP_SECRET_KEY = os.getenv("APP_SECRET_KEY")
 app.secret_key = APP_SECRET_KEY
-day = datetime.today().strftime("%Y%m%d") # 시작 전 크롤링 실행
+
+t = datetime.today().strftime("%Y%m%d") # 시작 전 크롤링 실행
+day=""
+if datetime.now().hour >= 16:
+    day = t
+else:
+    day = str(int(t)-1)
+
 
 @app.route('/')
 def index():

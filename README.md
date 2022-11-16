@@ -12,9 +12,9 @@ A website that crawls keywords of articles related to it and displays it in word
 
 <작업 노트>
 < 현재 작업 >
-	- DB 참조시 함수로 모듈화
 	- APP 키 암호화 ( git ignore )
 	- 서버에서 자동으로 크롤링 실행
+    
 
 < 지난 작업 >
 1. 부트스트랩 flask 환경에 맞게 적용
