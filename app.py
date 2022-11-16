@@ -1,12 +1,16 @@
 from flask import Flask, url_for, session, render_template, request, redirect, flash
 import sqlite3
+from dotenv import load_dotenv
+from werkzeug.utils import secure_filename
 import datetime
+import os
 from os import path
 
 ROOT = path.dirname(path.realpath(__file__))
-
 app = Flask(__name__)
-app.secret_key = 'tjdgus12'
+
+APP_SECRET_KEY = os.getenv("APP_SECRET_KEY")
+app.secret_key = APP_SECRET_KEY
 # day = datetime.date.today().strftime("%Y%m%d")# 시작 전 크롤링 실행
 day = "20221115"    # 오늘 날짜
 
