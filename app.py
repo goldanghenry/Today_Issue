@@ -13,12 +13,13 @@ APP_SECRET_KEY = os.getenv("APP_SECRET_KEY")    # .env에 있는 SECRET_KEY를 �
 app.secret_key = APP_SECRET_KEY                 # flask의 session을 사용하기 위한 secret_key
 
 # 매일 오후 15시에 웹 사이트 업데이트 (스크랩핑은 14:55분에 자동 실행)
-t = datetime.today().strftime("%Y%m%d") 
-day=""
-if datetime.now().hour >= 15:
-    day = t
-else:
-    day = str(int(t)-1)
+# t = datetime.today().strftime("%Y%m%d") 
+# day=""
+# if datetime.now().hour >= 15:
+#     day = t
+# else:
+#     day = str(int(t)-1)
+day = "20221119"
 
 
 @app.route('/')
