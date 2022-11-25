@@ -5,7 +5,6 @@ from datetime import datetime
 import os
 from os import path
 
-
 load_dotenv()       # dotenv()를 사용하기 위해 로드
 ROOT = path.dirname(path.realpath(__file__))
 app = Flask(__name__)
@@ -21,7 +20,7 @@ app.secret_key = APP_SECRET_KEY                 # flask의 session을 사용하�
 #     day = str(int(t)-1)
 day = "20221119"
 
-
+from flask import Flask, url_for, session, render_template, request, redirect, flash
 @app.route('/')
 def index():
     # 기사 리스트 가져오기

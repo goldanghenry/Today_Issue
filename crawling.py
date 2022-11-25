@@ -187,11 +187,10 @@ def Run_Crawling(date):
     return ranked_tags
 
 def Make_Cloud_Img(tags, date):
-    # 필요한 파일
-    font='NanumGothic.ttf'
-    mask = np.array(Image.open('mask.png'))
+    font='NanumGothic.ttf'  # 폰트
+    mask = np.array(Image.open('mask.png')) # 구름 모양의 mask
 
-    # Init WordCloud
+    # Init WordCloud, 날짜마다 다른 디자인으로
     day = int(date)
     if(day%5 == 0):
         word_cloud = WordCloud(font_path=font, background_color='white',mask = mask, width=1600, height=800,max_font_size=150, colormap='autumn')
@@ -205,8 +204,7 @@ def Make_Cloud_Img(tags, date):
         word_cloud = WordCloud(font_path=font, background_color='white',mask = mask, width=1600, height=800,max_font_size=150, colormap='Dark2')
 
     word_cloud.generate_from_frequencies(dict(tags))
-    # Drawing WordCloud
-    plt.figure(figsize=(20, 10))
+    plt.figure(figsize=(20, 10)) # Drawing WordCloud
     plt.imshow(word_cloud)
     plt.axis("off")
     # Save Image
@@ -225,7 +223,7 @@ def Save_Crawling(date):           # 가장 출현 빈도수가 높은 30개의 
 #------------------------------------------Run!!------------------------------------------
 # 크롤링할 날짜
 #date = datetime.today().strftime("%Y%m%d") # 시작 전 크롤링 실행
-date = "20221119"
+date = "20221124"
 # 최초1회->주석
 dataset = Title_List_Crawling(date)             # 50개의 기사 크롤링하기
 Add_Title_List(dataset, date)                   # (최초1회->주석) 크롤링 결과 DB에 저장
