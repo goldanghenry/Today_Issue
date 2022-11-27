@@ -224,14 +224,16 @@ def Save_Crawling(date):           # 가장 출현 빈도수가 높은 30개의 
 # 크롤링할 날짜
 #date = datetime.today().strftime("%Y%m%d") # 시작 전 크롤링 실행
 date = "20221124"
-# 최초1회->주석
-dataset = Title_List_Crawling(date)             # 50개의 기사 크롤링하기
-Add_Title_List(dataset, date)                   # (최초1회->주석) 크롤링 결과 DB에 저장
+for i in range(20221125, 20221128):
+    # 최초1회->주석
+    date = str(i)
+    dataset = Title_List_Crawling(date)             # 50개의 기사 크롤링하기
+    Add_Title_List(dataset, date)                   # (최초1회->주석) 크롤링 결과 DB에 저장
 
-# 반복 실행
-#Run_Crawling(date)                              #  불용어 수정
+    # 반복 실행
+    #Run_Crawling(date)                              #  불용어 수정
 
-# 주석->수정후 실행
-Save_Crawling(date)                           #  DB에 결과 저장
+    # 주석->수정후 실행
+    Save_Crawling(date)                           #  DB에 결과 저장
 
 #-----------------------------------------------------------------------------------------
