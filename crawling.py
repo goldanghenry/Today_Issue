@@ -224,7 +224,7 @@ def Save_Crawling(date):           # 가장 출현 빈도수가 높은 30개의 
 # 크롤링할 날짜
 #date = datetime.today().strftime("%Y%m%d") # 시작 전 크롤링 실행
 date = "20221124"
-for i in range(20221125, 20221128):
+for i in range(20221201, 20221204):
     # 최초1회->주석
     date = str(i)
     dataset = Title_List_Crawling(date)             # 50개의 기사 크롤링하기
