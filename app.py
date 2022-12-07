@@ -18,7 +18,7 @@ app.secret_key = APP_SECRET_KEY                 # flask의 session을 사용하�
 #     day = t
 # else:
 #     day = str(int(t)-1)
-day = "20221203"
+day = "20221207"
 
 from flask import Flask, url_for, session, render_template, request, redirect, flash
 @app.route('/')
